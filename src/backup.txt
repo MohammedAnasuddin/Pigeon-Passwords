@@ -1,0 +1,96 @@
+
+import React, { useState } from 'react';
+import promptUserForWords from './generator';
+import './index.css';
+
+const App = () => {
+  const [input, setInput] = useState('');
+  const [password, setPassword] = useState('');
+  const [notes, setNotes] = useState([]);
+
+  const handleGeneratePassword = async () => {
+    try {
+
+      const customWords = input.split(',').map(word => word.trim()).filter(word => word.length > 0);
+      const result = await promptUserForWords(customWords);
+      if (result) {
+        setPassword(result.password);
+        setNotes(result.notes);
+      }
+
+
+    } catch (error) {
+      console.error("Error generating password:", error);
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center p-6 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">Custom Password Generator</h1>
+      <div className="w-full max-w-lg mb-6">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Enter words separated by commas"
+          className="w-full p-2 border border-gray-300 rounded bg-gray-100 text-gray-800"
+        />
+        <button
+          onClick={handleGeneratePassword}
+          className="mt-4 w-full bg-gray-700 text-white py-2 rounded hover:bg-gray-800"
+        >
+          Generate Password
+        </button>
+      </div>
+      {password && (
+        <div className="w-full max-w-lg bg-white shadow-md rounded-lg p-4 mt-4 border border-gray-300">
+          <h2 className="text-xl font-semibold text-gray-800">Generated Password</h2>
+          <p className="mt-2 text-lg font-mono break-all text-gray-900">{password}</p>
+          <h3 className="text-lg font-medium mt-4 text-gray-800">Tips to Remember</h3>
+          <ul className="list-disc list-inside mt-2 text-left text-gray-700">
+            {notes.map((note, index) => (
+              <li key={index}>{note}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
+
+
+
+
+
+giVE FULL CODES AND ALSO INCLUDE:
+1.tag in the should not contain only symbols
+exampe : !!!,
+
+2.  if the below error occurs on hitting button 
+generator.jsx:39 
+ POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent net::ERR_INTERNET_DISCONNECTED
+
+generator.jsx:51 Error generating password: GoogleGenerativeAIError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: Failed to fetch
+    at makeRequest (@google_generative-a…s?v=14f1ac5f:182:22)
+    at makeModelRequest (@google_generative-a…s?v=14f1ac5f:177:10)
+    at async generateContent (@google_generative-a…s?v=14f1ac5f:518:20)
+    at async generatePassword (generator.jsx:39:20)
+    at async promptUserForWords (generator.jsx:59:10)
+    at async handleGeneratePassword (App.jsx:43:22)
+
+then show the below alert box sayig no internet connection
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+  <strong class="font-bold">Holy smokes!</strong>
+
+  <span class="block sm:inline">Something seriously bad happened.</span>
+  <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+    <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+  </span>
+</div>
+
+give me the full codes
+
+
+npx javascript-obfuscator App.js --output App.obfuscated.js
